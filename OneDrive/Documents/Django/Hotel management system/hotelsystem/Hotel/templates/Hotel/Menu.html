@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f8f6;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      color: black;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+    header p {
+      color: #c5a059;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .menu-section {
+      margin-bottom: 40px;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .menu-section h2 {
+      border-bottom: 2px solid #c5a059;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+      font-size: 1.8rem;
+    }
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 15px;
+      border-bottom: 1px dashed #e0e0e0;
+      padding-bottom: 10px;
+    }
+    .item-info {
+      flex: 1;
+      padding-right: 20px;
+    }
+    .item-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #222;
+    }
+    .item-desc {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .item-price {
+      font-weight: bold;
+      color: #c5a059;
+      font-size: 1.1rem;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #1a1a1a;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">🍽️ Hotel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'menu' %}">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'book_table' %}">Book a table</a></li>
+                     {% if perms.Hotel.client %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'client' %}">Client list</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+  <header>
+    <h1>Avatara Resturant</h1>
+    <p>Fine Dining &  Menu</p>
+  </header>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <input type="text" placeholder="Search food..." id="search" class="form-control">
+    </div>
+    <div class="col">
+      <button class="btn btn-primary" onclick="searchMenu()">Search</button>
+      <button class="btn btn-outline-secondary" onclick="clearSearch()">Clear</button>
+    </div>
+  </div>
+  <p id="no-results" class="text-center text-muted mt-4" style="display:none;">
+    No food found.
+  </p>
+</div>
+
+  <div class="container">
+    
+    <div class="menu-section">
+      <h2>Breakfast</h2>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Puri Tarkari</div>
+          <div class="item-desc">Deep-fried wheat flour bread (puri) served with spiced potato and vegetable curry (aalu tarkari).</div>
+        </div>
+        <div class="item-price"> 60 NRS</div>
+      </div>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Aalu Chana / Aalu Tama</div>
+          <div class="item-desc">Spiced boiled or stir-fried yellow turmeric potatoes combined with black chickpeas (chana) or bamboo shoots.</div>
+        </div>
+        <div class="item-price">40 NRS</div>
+      </div>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Aalu Paratha</div>
+          <div class="item-desc">Whole-wheat flatbread stuffed with a spiced mashed potato filling, served with curd (dahi) or pickle.</div>
+        </div>
+        <div class="item-price">50 NRS</div>
+    </div>
+         <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Anda Chiura</div>
+          <div class="item-desc">• Flattened rice (chiura) served with a side of spiced eggs (boiled, fried, or as an omelet) and local pickle (achar).</div>
+        </div>
+        <div class="item-price">50 NRS</div>
+    </div>
+    </div>
+  
+    <div class="menu-section">
+      <h2>Main Courses</h2>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Veg Dal Bhat</div>
+          <div class="item-desc">Purely plant-based, featuring lentil soup, rice, seasonal vegetable curries, greens, and pickles.</div>
+        </div>
+        <div class="item-price">200 NRS</div>
+      </div>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Chicken Dal Bhat</div>
+          <div class="item-desc">The standard veg set accompanied by a rich, bone-in or boneless chicken curry (kukhura ko masu).</div>
+        </div>
+        <div class="item-price">300 NRS</div>
+      </div>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Mutton Dal Bhat:</div>
+          <div class="item-desc">The standard veg set accompanied by a slow-cooked goat or lamb curry (bheda/khasi ko masu).</div>
+        </div>
+        <div class="item-price">400 NRS</div>
+      </div>
+       <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Veg Momo</div>
+          <div class="item-desc">Stuffed with a finely chopped mix of vegetables like cabbage, carrots, onions, spring onions, and coriander, seasoned with garlic, ginger, and basic spices.</div>
+        </div>
+        <div class="item-price">130 NRS</div>
+      </div>
+             <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Chicken Momo</div>
+          <div class="item-desc">Filled with minced chicken keema mixed with onions, green chillies, garlic-ginger paste, cilantro, oil/ghee, and momo masala.</div>
+        </div>
+        <div class="item-price">160 NRS</div>
+      </div>
+             <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Mutton Momo</div>
+          <div class="item-desc">Filled with minced goat/mutton meat combined with finely chopped onions, garlic, ginger, fresh herbs, and warming spices.</div>
+        </div>
+        <div class="item-price">200 NRS</div>
+      </div>
+             <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Buff Momo</div>
+          <div class="item-desc">The classic, traditional Nepali variety stuffed with minced water buffalo meat (buff), which is fatty, juicy, and rich in flavor.</div>
+        </div>
+        <div class="item-price">140 NRS</div>
+      </div>
+             <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Sea Momo</div>
+          <div class="item-desc"> Stuffed with seafood (such as minced fish, shrimp, or prawn keema) seasoned with coastal or Asian-inspired aromatics, lemongrass, garlic, and green onions.</div>
+        </div>
+        <div class="item-price">230 NRS</div>
+      </div>
+             <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Jhol Momo</div>
+          <div class="item-desc">Not a distinct filling type, but a style of serving where cooked momos (veg, chicken, buff, etc.) are completely submerged in a warm, thin, tangy, and nutty spiced soup called jhol.</div>
+        </div>
+        <div class="item-price">180 NRS</div>
+      </div>
+             <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Veg Pizza</div>
+          <div class="item-desc"> Sliced bell peppers (capsicum), onions, tomatoes, sweet corn, olives, mushrooms, and mozzarella cheese.</div>
+        </div>
+        <div class="item-price">300 NRS</div>
+      </div>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Chicken Pizza</div>
+          <div class="item-desc">Pre-cooked chicken pieces (such as grilled, roasted, or tikka-spiced chicken chunks), onions, bell peppers, and mozzarella or cheddar cheese.</div>
+        </div>
+        <div class="item-price">500 NRS</div>
+      </div>
+              <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Paneer Pizza</div>
+          <div class="item-desc">Cubed Indian cottage cheese (paneer), often marinated in yogurt and spices (like tandoori masala or makhani gravy), onions, and bell peppers.</div>
+        </div>
+        <div class="item-price">400 NRS</div>
+      </div>
+    </div>
+
+
+    <div class="menu-section">
+      <h2>Beverages</h2>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Artisan Espresso / Cappuccino</div>
+          <div class="item-desc">Freshly ground locally roasted coffee beans.</div>
+        </div>
+        <div class="item-price">300 NRS</div>
+      </div>
+      <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Freshly Squeezed Juice</div>
+          <div class="item-desc">Choice of orange, grapefruit, or apple.</div>
+        </div>
+        <div class="item-price">150 NRS</div>
+      </div>
+        <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name"> Chiya</div>
+          <div class="item-desc">Spiced milk tea brewed with black tea leaves, milk, sugar, and warming spices like cardamom and ginger.</div>
+        </div>
+        <div class="item-price">50 NRS</div>
+      </div>
+        <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Lassi / Mohi</div>
+          <div class="item-desc">Cool yogurt-based drinks (often spiced or sweetened) or mohi (traditional buttermilk/whey) enjoyed in warmer valleys and the Terai plains.</div>
+        </div>
+        <div class="item-price">50 NRS</div>
+      </div>
+        <div class="menu-item">
+        <div class="item-info">
+          <div class="item-name">Juju Dhau</div>
+          <div class="item-desc">While technically a thick, rich buffalo milk curd from Bhaktapur, it is often scooped and sipped or enjoyed alongside cultural gatherings.</div>
+        </div>
+        <div class="item-price">150 NRS</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p> 2026 Avatar Resturant</p>
+  </footer>
+<script>
+  function searchMenu() {
+    const query = document.getElementById("search").value.trim().toLowerCase();
+    let totalFound = 0;
+
+    document.querySelectorAll(".menu-section").forEach(function (section) {
+      let foundInSection = 0;
+
+      section.querySelectorAll(".menu-item").forEach(function (item) {
+        const name = item.querySelector(".item-name").textContent.toLowerCase();
+        const desc = item.querySelector(".item-desc").textContent.toLowerCase();
+        const match = name.includes(query) || desc.includes(query);
+
+        item.style.display = match ? "" : "none";
+        if (match) foundInSection++;
+      });
+
+      section.style.display = foundInSection > 0 ? "" : "none";
+      totalFound += foundInSection;
+    });
+
+    document.getElementById("no-results").style.display =
+      totalFound === 0 ? "block" : "none";
+  }
+
+  function clearSearch() {
+    document.getElementById("search").value = "";
+    searchMenu();  
+  }
+
+
+  document.getElementById("search").addEventListener("input", searchMenu);
+
+  document.getElementById("search").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") searchMenu();
+  });
+</script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

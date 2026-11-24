@@ -1,0 +1,67 @@
+{% extends 'Hotel/base.html' %}
+
+{% block content %}
+<div class="container my-5">
+
+  <table class="table table-bordered table-hover text-center align-middle">
+    <thead class="table-light">
+      <tr>
+        <th class="px-3 py-2">No.</th>
+        <th class="px-3 py-2">Name</th>
+        <th class="px-3 py-2">Email</th>
+        <th class="px-3 py-2">Phone Number</th>
+        <th class="px-3 py-2">Table ID</th>
+        <th class="px-3 py-2">Reservation Time</th>
+        <th class="px-3 py-2">Update</th>
+        <th class="px-3 py-2">Action</th>
+        <th class="px-3 py-2">Document</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for client in Client %}
+      <tr>
+        <td class="px-3 py-2">{{ forloop.counter }}</td>
+        <td class="px-3 py-2">{{ client.name }}</td>
+        <td class="px-3 py-2">{{ client.email }}</td>
+        <td class="px-3 py-2">{{ client.phone_number }}</td>
+        <td class="px-3 py-2">{{ client.table }}</td>
+        <td class="px-3 py-2">{{ client.reservation_time }}</td>
+        <td><a href="{% url 'edit_client' Hotel_id=client.id %}" class="btn btn-sm btn-outline-warning">Edit</a></td>
+        <td class="px-3 py-2">
+          <button type="button" class="btn btn-sm btn-outline-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteModal{{ forloop.counter }}">
+            Delete
+          </button>
+
+          <div class="modal fade" id="deleteModal{{ forloop.counter }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Confirm Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-start">
+                  Are you sure you want to delete {{ client.name }}?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                  <a class="btn btn-danger" href="{% url 'delete' Hotel_id=client.id %}">Yes, delete</a>
+                </div>
+              </div>
+              <td class="px-3 py-2">
+  {% if client.document %}
+    <a href="{{ client.document.url }}" target="_blank">View Document</a>
+  {% else %}
+    —
+  {% endif %}
+</td>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

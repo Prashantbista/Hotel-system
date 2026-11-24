@@ -1,0 +1,61 @@
+{% extends 'Hotel/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow border-0">
+            <div class="card-header bg-dark text-white text-center py-3">
+                <h4 class="mb-0">Reserve Your Table</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="Your full name" value="{{ client.name|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Phone Number</label>
+                        <input type="number" name="phone_number" class="form-control" placeholder="98XXXXXXXXX" value="{{ client.phone_number|default:'' }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email</label>
+                        <input type="email" name="email" class="form-control" placeholder="you@example.com" value="{{ client.email|default:'' }}" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-semibold">Table No</label>
+                            <select name="Table_no" class="form-select">
+                                <option value="1">Table 1</option>
+                                <option value="2">Table 2</option>
+                                <option value="3">Table 3</option>
+                                <option value="4">Table 4</option>
+                                <option value="5">Table 5</option>
+                                <option value="6">Table 6</option>
+                                <option value="7">Table 7</option>
+                                <option value="8">Table 8</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-semibold">Reservation Time</label>
+                            <input type="time" name="reservation_time" class="form-control" value="{{ client.reservation_time|time:'H:i' }}" required>
+                        </div>
+                         <div class="col-6 mb-3">
+                            <label class="form-label fw-semibold">Document</label>
+                            <input type="file" name="document" class="form-control" {% if not client %}required{% endif %}>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-3">
+                    <input type="submit" name="Book" value="{% if client %}Update{% else %}Book Now{% endif %}" class="btn btn-primary btn-lg">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
